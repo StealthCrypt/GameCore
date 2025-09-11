@@ -1,6 +1,6 @@
 export default function Navbar() {
   return (
-    <nav className="w-full h-10 bg-green-900 text-green flex items-center px-4">
+    <nav className="w-full h-10 bg-blue-900 text-green flex items-center px-4">
       <div className="flex-1">
         <h1 className="text-lg font-bold">GameCore</h1>
       </div>
