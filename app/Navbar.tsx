@@ -1,11 +1,46 @@
 "use client"
 
-import type React from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 
 const Navbar = () => {
-  const pathname = usePathname()
+  const [pathname, setPathname] = useState<string>(typeof window !== "undefined" ? window.location.pathname : "/")
+
+  useEffect(() => {
+    const update = () => setPathname(window.location.pathname)
+
+    const originalPush = history.pushState
+    const originalReplace = history.replaceState
+
+    // Monkey-patch pushState/replaceState to emit a custom event so SPA navigations are caught
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    history.pushState = function () {
+      // @ts-ignore
+      originalPush.apply(this, arguments)
+      window.dispatchEvent(new Event("locationchange"))
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    history.replaceState = function () {
+      // @ts-ignore
+      originalReplace.apply(this, arguments)
+      window.dispatchEvent(new Event("locationchange"))
+    }
+
+    window.addEventListener("popstate", update)
+    window.addEventListener("locationchange", update)
+
+    return () => {
+      // restore originals
+      // @ts-ignore
+      history.pushState = originalPush
+      // @ts-ignore
+      history.replaceState = originalReplace
+      window.removeEventListener("popstate", update)
+      window.removeEventListener("locationchange", update)
+    }
+  }, [])
 
   const isActive = (path: string) => pathname === path
 
@@ -93,9 +128,6 @@ const Navbar = () => {
             Login
           </button>
         </nav>
-    <nav className="w-full h-10 bg-blue-900 text-green flex items-center px-4">
-      <div className="flex-1">
-        <h1 className="text-lg font-bold">GameCore</h1>
       </div>
     </header>
   )
