@@ -49,8 +49,12 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">GC</span>
+            <div className="h-8 w-8 relative overflow-visible">
+              <img
+                src="/GameCore-Logo.png"
+                alt="Game Core Logo"
+                className="h-full w-full object-contain relative transform scale-230" // img (logo) scale 2.3x bigger than Navbar restriction.
+                />
             </div>
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
