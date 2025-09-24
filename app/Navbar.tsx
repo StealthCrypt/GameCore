@@ -1,11 +1,46 @@
 "use client"
 
-import type React from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 
 const Navbar = () => {
-  const pathname = usePathname()
+  const [pathname, setPathname] = useState<string>(typeof window !== "undefined" ? window.location.pathname : "/")
+
+  useEffect(() => {
+    const update = () => setPathname(window.location.pathname)
+
+    const originalPush = history.pushState
+    const originalReplace = history.replaceState
+
+    // Monkey-patch pushState/replaceState to emit a custom event so SPA navigations are caught
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    history.pushState = function () {
+      // @ts-ignore
+      originalPush.apply(this, arguments)
+      window.dispatchEvent(new Event("locationchange"))
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    history.replaceState = function () {
+      // @ts-ignore
+      originalReplace.apply(this, arguments)
+      window.dispatchEvent(new Event("locationchange"))
+    }
+
+    window.addEventListener("popstate", update)
+    window.addEventListener("locationchange", update)
+
+    return () => {
+      // restore originals
+      // @ts-ignore
+      history.pushState = originalPush
+      // @ts-ignore
+      history.replaceState = originalReplace
+      window.removeEventListener("popstate", update)
+      window.removeEventListener("locationchange", update)
+    }
+  }, [])
 
   const isActive = (path: string) => pathname === path
 
@@ -26,17 +61,18 @@ const Navbar = () => {
           </Link>
 
           <div className="relative flex-1 max-w-md mr-20 ml-4 shadow-lg shadow-white/20">
-            <input
+            <input 
               type="text"
               placeholder="Search games..."
               className="w-full bg-muted border border-border rounded-lg px-4 py-2 pl-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 mr-20"
             />
-            <svg
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground shadow-lg shadow-white/20"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+            <Link href="/search">
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground shadow-lg shadow-white/20"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -44,6 +80,7 @@ const Navbar = () => {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
+            </Link>
           </div>
         </div>
         
@@ -81,9 +118,6 @@ const Navbar = () => {
             >
               Request
             </Link>
-
-            
-
             <Link
               href="/login"
               className={`flex items-center px-3 py-2 rounded-md transition-colors ${
@@ -105,7 +139,6 @@ const Navbar = () => {
             <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M3 6.00092H21M3 12.0009H21M3 18.0009H21" stroke="#ffffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            
           </button>
           
         </nav>
