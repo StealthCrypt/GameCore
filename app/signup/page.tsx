@@ -43,8 +43,12 @@ export default function Signup() {
         Sign Up
       </button>
       <p className="justify-center text-md font-semibold mt-4 text-center">
-        <Link href="/login" className="justify-center text-sm font-lightbold text-center">
-          Already have an account? Log in here!
+        Already have an account?{" "}
+        <Link 
+          href="/login"
+          className="hover:underline hover:text-gray-300"
+        >
+          Log in here!
         </Link>
       </p>
     </div>

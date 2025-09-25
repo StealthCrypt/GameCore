@@ -26,7 +26,7 @@ export default function Login() {
     </ol>
     <ol className="side-by-side flex justify-between mb-3 px-10">
       <li>
-        <p className="justify-center text-md font-semibold mb-1 text-center">
+        <p className="justify-center text-md font-semibold mb-1 text-center hover:underline hover:text-gray-300">
           Forgot Password?
         </p>
       </li>
@@ -40,9 +40,13 @@ export default function Login() {
     <button className="shadow-lg shadow-purple-500 w-full bg-black transition-all duration-500 ease-in-out hover:bg-purple-800 shadow-lg shadow-purple-200 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
       Log in
     </button>
-    <p className="justify-center text-md font-semibold mb-1 text-center">
-      <Link href="/signup" className="justify-center text-sm font-lightbold mt-2 text-center">
-        Not registered yet? Sign up here!
+    <p className="text-md font-semibold mb-1 text-center text-white">
+      Not registered yet?{" "}
+      <Link 
+        href="/signup" 
+        className="hover:underline hover:text-gray-300"
+      >
+        Sign up here!
       </Link>
     </p>
   </div>
