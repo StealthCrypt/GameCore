@@ -255,7 +255,8 @@ export default function Game() {
         <div className="flex-grow flex flex-col h-[450px] space-y-4">
           <div>
             <h2 className="text-4xl font-semibold pt-3 pb-3 drop-shadow-[0_0_4px_rgba(0,0,0,1)] text-white">CounterStrike : Global Offensive</h2>
-            
+            <h1 className="inline-block p-2 mt-2 text-2xl font-semibold text-white rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
+            <h2 className="text-sm font-semibold pt-3 pb-3 drop-shadow-[0_0_4px_rgba(0,0,0,1)] text-white">Minimum Price</h2>
           </div>
         
 
