@@ -256,19 +256,19 @@ export default function Game() {
 
         {/* Bottom section */}
         <div className="flex-grow flex flex-col h-[450px] space-y-4 bg-gray-900 p-5 mt-5 rounded-lg">
-          <ol className="side-by-side-container list-inside flex flex-wrap gap-3 drop-shadow-[0_0_4px_rgba(0,0,0,1)]">
+          <ol className="side-by-side-container list-inside flex flex-wrap gap-3 drop-shadow-[0_0_4px_rgba(0,0,0,1)] p-5">
               <h1 className="text-lg">Tags</h1>
-              <li className="text-white bg-gradient-to-r from-blue-800 to-blue-600 text-black text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-3">
+              <li className="text-white bg-gradient-to-r from-purple-600 to-purple-400 text-black text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-3">
                 FPS
               </li>
-              <li className="text-white bg-gradient-to-r from-blue-800 to-blue-600 text-black text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-1">
+              <li className="text-white bg-gradient-to-r from-purple-600 to-purple-400 text-black text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-1">
                 Multiplayer
               </li>
           </ol>
 
           {/* TABLE LINKS*/}
 
-          <div className="bg-gray-900 rounded-lg p-4 flex-1 drop-shadow-[0_0_4px_rgba(0,0,0,1)]" style={{
+          <div className="bg-gray-900 rounded-lg flex-1 drop-shadow-[0_0_4px_rgba(0,0,0,1)]" style={{
             maxHeight: '150px',
             overflowY: 'auto',
             minHeight: '150px'
@@ -276,7 +276,8 @@ export default function Game() {
             
             
             <table className="w-full table-fixed border-separate border-spacing-y-3">
-              <tr>
+              <thead>
+              <tr className="">
                 <th>Platform</th>
                 <th>Versions</th>
                 <th>Source</th>
@@ -316,7 +317,7 @@ export default function Game() {
                   <h1>External</h1>
                 </td>
                 <td>
-                  <h1 className="flex items-center justify-center text-center mx-auto text-lg font-semibold text-white rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
+                  <h1 className="w-fit px-2 flex items-center justify-center text-center mx-auto text-lg font-semibold text-white rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
                 </td>
               </tr>
               <tr className="">
@@ -352,9 +353,10 @@ export default function Game() {
                   <h1>External</h1>
                 </td>
                 <td>
-                  <h1 className="flex items-center justify-center text-center mx-auto text-lg font-semibold text-white rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
+                  <h1 className="flex items-center justify-center text-center w-fit px-2 mx-auto text-lg font-semibold text-white rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
                 </td>
               </tr>
+              </thead>
             </table>
           </div>
 
