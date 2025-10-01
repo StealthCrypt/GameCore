@@ -5,7 +5,6 @@ import Link from "next/link"
 
 const Navbar = () => {
   const [pathname, setPathname] = useState<string>(typeof window !== "undefined" ? window.location.pathname : "/")
-
   useEffect(() => {
     const update = () => setPathname(window.location.pathname)
 
