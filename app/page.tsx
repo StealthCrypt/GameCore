@@ -17,7 +17,7 @@ export default function Home() {
           <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-2 ml-2 mr-2">
 
             {[...Array(3)].map((_, index) => (
-              <Link href="/game">
+              <a href="/game">
               <li
                 key={index}
                 className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg drop-shadow-[0_0_30px_rgba(0,0,0,1)]">
@@ -35,7 +35,7 @@ export default function Home() {
                   
                 </div>
               </li>
-              </Link>
+              </a>
             ))}
           </ol>
         </div>
