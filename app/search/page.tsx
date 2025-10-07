@@ -149,9 +149,8 @@ export default function Search() {
           <h1 className="text-center text-xl font-semibold pt-3">found x results</h1>
           <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2 ml-2 mr-2">
             {[...Array(7)].map((_, index) => (
-              <Link href="/game">
+              <Link href="/game" key={index}>
                 <li
-                  key={index}
                   className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg drop-shadow-[0_0_30px_rgba(0,0,0,1)]"
                 >
                   <Image
