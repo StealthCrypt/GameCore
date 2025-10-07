@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma'
 // GET single game by ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const game = await prisma.game.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         purchases: {
           include: {
@@ -38,14 +39,15 @@ export async function GET(
 // PUT update game
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { title, description, price, imageUrl, category } = body
 
     const game = await prisma.game.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         description,
@@ -65,11 +67,12 @@ export async function PUT(
 // DELETE game
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     await prisma.game.delete({
-      where: { id: params.id }
+      where: { id }
     })
     return NextResponse.json({ message: 'Game deleted successfully' })
   } catch (error) {

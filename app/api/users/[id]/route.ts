@@ -4,11 +4,12 @@ import { prisma } from '@/lib/prisma'
 // GET single user by ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         email: true,
@@ -39,14 +40,15 @@ export async function GET(
 // PUT update user
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { name, email, isAdmin } = body
 
     const user = await prisma.user.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         name,
         email,
@@ -72,11 +74,12 @@ export async function PUT(
 // DELETE user
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     await prisma.user.delete({
-      where: { id: params.id }
+      where: { id }
     })
     return NextResponse.json({ message: 'User deleted successfully' })
   } catch (error) {
