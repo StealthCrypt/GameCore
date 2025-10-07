@@ -1,47 +1,18 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const Navbar = () => {
-  const [pathname, setPathname] = useState<string>(typeof window !== "undefined" ? window.location.pathname : "/")
+  const pathname = usePathname()
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
-    const update = () => setPathname(window.location.pathname)
-
-    const originalPush = history.pushState
-    const originalReplace = history.replaceState
-
-    // Monkey-patch pushState/replaceState to emit a custom event so SPA navigations are caught
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    history.pushState = function () {
-      // @ts-ignore
-      originalPush.apply(this, arguments)
-      window.dispatchEvent(new Event("locationchange"))
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    history.replaceState = function () {
-      // @ts-ignore
-      originalReplace.apply(this, arguments)
-      window.dispatchEvent(new Event("locationchange"))
-    }
-
-    window.addEventListener("popstate", update)
-    window.addEventListener("locationchange", update)
-
-    return () => {
-      // restore originals
-      // @ts-ignore
-      history.pushState = originalPush
-      // @ts-ignore
-      history.replaceState = originalReplace
-      window.removeEventListener("popstate", update)
-      window.removeEventListener("locationchange", update)
-    }
+    setMounted(true)
   }, [])
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => mounted && pathname === path
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50 shadow-lg shadow-white/20">
