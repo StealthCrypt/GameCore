@@ -3,7 +3,8 @@ import Link from "next/link"
 export default function Signup() {
   return (
 
-    <div className="shadow-lg shadow-purple-500 mb-3 p-5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg borderwidth-5 justify-content-center ml-125 mr-125 mt-30" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: '#ffffffff' }}>
+    <main className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#202020ff'}}>
+    <div className="shadow-lg shadow-purple-500 mb-3 p-5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg borderwidth-5 justify-content-center w-1/3 mx-auto" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: '#ffffffff' }}>
       <p className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] justify-center text-2xl font-semibold mb-5 text-center">
         Welcome!
       </p>
@@ -48,7 +49,7 @@ export default function Signup() {
         </Link>
       </p>
     </div>
-
+</main>
 
 
 

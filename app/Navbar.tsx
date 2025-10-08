@@ -44,7 +44,7 @@ const Navbar = () => {
   const isActive = (path: string) => pathname === path
 
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50 shadow-lg shadow-white/20">
+    <header className="bg-background border-b border-border sticky top-0 z-50 shadow-lg shadow-white/20 bg-gradient-to-r from-gray-900 to-purple-400">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <Link href="/" className="flex items-center space-x-3">
@@ -59,7 +59,7 @@ const Navbar = () => {
             </div>
           </Link>
 
-          <div className="relative flex-1 max-w-md mr-20 ml-4 shadow-lg shadow-white/20">
+          <div className="relative flex-1 max-w-md mr-20 ml-4 ">
             <input 
               type="text"
               placeholder="Search games..."
@@ -67,7 +67,7 @@ const Navbar = () => {
             />
             <Link href="/search">
               <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground shadow-lg shadow-white/20"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -134,11 +134,7 @@ const Navbar = () => {
               Login
             </Link>
           </div>
-          <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg hover:bg-secondary/80 transition-colors font-medium hidden sm:flex items-center" style={{ position: 'absolute', right: '0' }}>
-            <svg className="h-10 w-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M3 6.00092H21M3 12.0009H21M3 18.0009H21" stroke="#ffffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+          
           
         </nav>
       </div>

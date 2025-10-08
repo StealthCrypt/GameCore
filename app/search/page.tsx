@@ -4,9 +4,9 @@ export default function Search() {
   return (
 
     <main className="grid grid-cols-1 md:grid-cols-[250px_1fr] h-screen w-screen overflow-hidden text-white font-sans">
-      <div className="bg-black pr-5 drop-shadow-[0_0_5px_rgba(255,255,255,1)] overflow-y-auto">
+      <div className="pr-5 drop-shadow-[0_0_5px_rgba(255,255,255,1)] overflow-y-auto"  style={{backgroundColor: '#202020ff'}}>
         <div className="z-20 fixed top-5 left-5 font-semibold">
-          <h1 className="text-2xl">Platform</h1>
+          <h1 className="text-2xl mb-2">Platform</h1>
           <ol>
             <li className="mb-1 text-white bg-gray-800 text-black text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-1">
                   <Image
@@ -141,18 +141,28 @@ export default function Search() {
             </label>
           </div>
           <h1 className="text-2xl mb-2 mt-5">Sort by</h1>
+          <ol>
+            <li className="mb-1 text-white text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-1">
+                  <input type="radio" id="sortby" className="justify-center text-md font-semibold text-center ml-1 mr-2" />
+                  Price: Low to High
+            </li>
+            <li className="mb-1 text-white text-lg rounded-lg w-fit text-center drop-shadow-[0_0_4px_rgba(0,0,0,1)] flex items-center justify-center space-x-1 px-1">
+                  <input type="radio" id="sortby" className="justify-center text-md font-semibold text-center ml-1 mr-2" />
+                  Price: High to Low
+            </li>
+          </ol>
         </div>
       </div>
 
-      <div className="flex-grow w-full h-full p-5 overflow-x-hidden">
-        <div className="bg-black rounded-lg max-w-7xl mx-auto">
-          <h1 className="text-center text-xl font-semibold pt-3">found x results</h1>
-          <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2 ml-2 mr-2">
+      <div className="flex-grow w-full h-full p-5 overflow-x-hidden" style={{backgroundColor: '#202020ff'}}>
+        <div className="rounded-lg max-w-7xl mx-auto">
+          <h1 className="p-4 text-xl pt-3">Found x results</h1>
+          <ol className="drop-shadow-[0_0_8px_rgba(40,40,40,1)] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 p-2 ml-2 mr-2">
             {[...Array(7)].map((_, index) => (
               <Link href="/game">
                 <li
                   key={index}
-                  className="bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg drop-shadow-[0_0_30px_rgba(0,0,0,1)]"
+                  className="bg-gray-800 rounded-lg"
                 >
                   <Image
                     className="flex justify-center items-center mx-auto"
@@ -162,9 +172,9 @@ export default function Search() {
                     width={150}
                     height={150}
                   />
-                  <div className="p-2 mx-auto mt-5 bg-gray-900 rounded-lg ">
-                    <h2 className="text-2xl font-semibold drop-shadow-[0_0_4px_rgba(0,0,0,1)]">Game name</h2>
-                    <h1 className="inline-block pr-1 pl-1 text-lg text-muted-foreground rounded-lg drop-shadow-[0_0_4px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
+                  <div className="p-2 mx-auto mt-5 bg-gradient-to-r from-purple-600 to-purple-500 rounded-lg ">
+                    <h2 className="text-2xl font-semibold drop-shadow-[0_0_4px_rgba(0,0,0,1)] mb-1">Game name</h2>
+                    <h1 className="inline-block pr-1 pl-1 text-lg text-muted-foreground rounded-lg drop-shadow-[0_0_5px_rgba(0,0,0,1)] bg-gradient-to-r from-green-900 to-green-700">$39.99</h1>
                   </div>
                 </li>
               </Link>
