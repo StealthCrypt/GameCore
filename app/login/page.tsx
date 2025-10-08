@@ -1,6 +1,54 @@
+'use client'
+
 import Link from "next/link"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { authAPI } from "@/lib/api"
 
 export default function Login() {
+  const router = useRouter()
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    if (!formData.email || !formData.password) {
+      setError('Please fill in all fields')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const result = await authAPI.login({
+        email: formData.email,
+        password: formData.password
+      })
+
+      // Store user data
+      if (rememberMe) {
+        localStorage.setItem('user', JSON.stringify(result.user))
+      } else {
+        sessionStorage.setItem('user', JSON.stringify(result.user))
+      }
+
+      // Success - redirect to home
+      alert('Login successful!')
+      router.push('/')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Invalid email or password')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
   
   <div className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] shadow-lg shadow-purple-500 mb-3 p-5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg borderwidth-5 justify-content-center ml-125 mr-125 mt-40" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: '#ffffffff' }}>
