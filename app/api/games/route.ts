@@ -37,16 +37,17 @@ export async function POST(request: Request) {
     const game = await prisma.game.create({
       data: {
         title,
-        description,
+        description: description || null,
         price: parseFloat(price),
-        imageUrl,
-        category,
+        imageUrl: imageUrl || null,
+        category: category || null,
       }
     })
     
     return NextResponse.json(game, { status: 201 })
   } catch (error) {
     console.error('Error creating game:', error)
-    return NextResponse.json({ error: 'Failed to create game' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create game'
+    return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }

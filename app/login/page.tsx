@@ -50,7 +50,8 @@ export default function Login() {
   }
 
   return (
-    <div className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] shadow-lg shadow-purple-500 mb-3 p-5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg borderwidth-5 justify-content-center ml-125 mr-125 mt-40" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: '#ffffffff' }}>
+    <main className="min-h-screen flex items-center justify-center" style={{backgroundColor: '#202020ff'}}>
+    <div className="drop-shadow-[0_0_10px_rgba(0,0,0,1)] shadow-lg shadow-purple-500 mb-3 p-5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg borderwidth-5 justify-content-center w-1/3 mx-auto" style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: '#ffffffff' }}>
       <p className="justify-center text-2xl font-semibold mb-5 text-center drop-shadow-[0_0_14px_rgba(0,0,0,1)]">
         Welcome Back! Please login.
       </p>
@@ -115,6 +116,7 @@ export default function Login() {
       </Link>
     </p>
   </div>
+  </main>
 
 
 
