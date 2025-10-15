@@ -70,7 +70,7 @@ export default function Login() {
               placeholder="Email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className=" shadow-lg shadow-purple-500 w-full bg-muted border border-border rounded-lg px-40 py-2 pl-10 mb-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 mr-20 focus:border-3 focus:transition-all duration-400 ease-in-out"
+              className=" shadow-lg shadow-purple-500 w-full bg-muted border border-border rounded-lg py-2 pl-2 mb-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-3 focus:transition-all duration-400 ease-in-out"
             />
           </li>
           <li>
@@ -79,7 +79,7 @@ export default function Login() {
               placeholder="Password"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="shadow-lg shadow-purple-500 w-full bg-muted border border-border rounded-lg px-40 py-2 pl-10 mb-5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 mr-20 focus:border-3 focus:transition-all duration-400 ease-in-out"
+              className="shadow-lg shadow-purple-500 w-full bg-muted border border-border rounded-lg py-2 pl-2 mb-5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-3 focus:transition-all duration-400 ease-in-out"
             />
           </li>
         </ol>
