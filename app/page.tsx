@@ -13,6 +13,7 @@ export default function Home() {
   const [freeOnly, setFreeOnly] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name' | ''>('')
+  const [showFilters, setShowFilters] = useState(false)
 
   // Get unique categories from games
   const categories = useMemo(() => {
@@ -55,10 +56,39 @@ export default function Home() {
   }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy])
 
   return (
-    <main className="min-h-screen w-full bg-[#202020] flex">
+    <main className="min-h-screen w-full bg-[#202020] flex relative">
+      {/* Mobile Filter Toggle Button */}
+      <button
+        onClick={() => setShowFilters(!showFilters)}
+        className="lg:hidden fixed top-20 left-4 z-40 bg-purple-600 text-white p-3 rounded-lg shadow-lg hover:bg-purple-700 transition-colors"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+      </button>
+
       {/* Sidebar Filters */}
-      <aside className="w-64 bg-black/30 p-6 border-r border-gray-700 overflow-y-auto">
-        <div className="space-y-6">
+      <aside className={`
+        fixed lg:static
+        top-0 left-0 h-full
+        w-64 bg-black/95 lg:bg-black/30
+        p-6 border-r border-gray-700
+        overflow-y-auto
+        z-40
+        transition-transform duration-300
+        ${showFilters ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Close button for mobile */}
+        <button
+          onClick={() => setShowFilters(false)}
+          className="lg:hidden absolute top-24 right-4 text-white hover:text-red-500"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="space-y-6 mt-20 lg:mt-0">
           {/* Category Filter */}
           <div>
             <h2 className="text-xl font-semibold text-white mb-3">Category</h2>
@@ -180,9 +210,17 @@ export default function Home() {
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
+      {showFilters && (
+        <div
+          onClick={() => setShowFilters(false)}
+          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+        />
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-4xl font-bold text-white mb-2">New Releases</h1>
+      <div className="flex-1 p-4 lg:p-8 overflow-y-auto w-full">
+        <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2 mt-16 lg:mt-0">New Releases</h1>
         <p className="text-gray-400 mb-6">Found {filteredGames.length} games</p>
         
         {loading && (
@@ -207,7 +245,7 @@ export default function Home() {
           </div>
         )}
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {filteredGames.map((game) => (
             <GameCard
               key={game.id}
