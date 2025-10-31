@@ -378,4 +378,6 @@ export function GameCard({ game, userId }: GameCardProps) {
 - **API Routes:** `app/api/*/route.ts`
 - **Database:** `prisma/schema.prisma`
 
-Your database is now fully integrated with your frontend! 🎮
+   ```
+
+Your database is now fully integrated with your frontend!

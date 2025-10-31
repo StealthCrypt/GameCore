@@ -105,7 +105,10 @@ ngrok tcp 3306
 
 ### Step 2: Update Vercel Environment Variable
 ```
-DATABASE_URL="mysql://gamecore:gamecore1@your-ip:3306/gamecore"
+   password=mypassword
+   ```
+
+   WARNING: Security risk - only for temporary testing!
 ```
 
 ---
@@ -113,7 +116,11 @@ DATABASE_URL="mysql://gamecore:gamecore1@your-ip:3306/gamecore"
 ## 📋 Vercel Environment Variables Checklist
 
 Required variables:
-- ✅ `DATABASE_URL` - Your database connection string
+In Vercel's environment variables, you need:
+
+- `DATABASE_URL` - Your database connection string
+
+Example for Railway PostgreSQL:
 
 Optional variables:
 - `NEXT_PUBLIC_API_URL` - Usually not needed (uses relative URLs)
@@ -275,7 +282,7 @@ Every push to `master` automatically:
 
 ---
 
-## 📝 Quick Commands Reference
+## Quick Commands Reference
 
 ```bash
 # Local development

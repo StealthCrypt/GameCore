@@ -72,7 +72,11 @@ Visit `http://localhost:3000`
 
 ---
 
-## 🛠️ Available Commands
+---
+
+## Available Commands
+
+### Development
 
 ```bash
 # Development
