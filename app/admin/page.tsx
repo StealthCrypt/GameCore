@@ -152,7 +152,7 @@ export default function AdminPage() {
                     className="w-4 h-4 text-purple-600 bg-muted border-border rounded focus:ring-purple-500 focus:ring-2"
                   />
                   <label htmlFor="isFree" className="ml-2 text-sm font-medium text-green-400 cursor-pointer">
-                    🎁 Free Game
+                    Free Game
                   </label>
                 </div>
               </div>
