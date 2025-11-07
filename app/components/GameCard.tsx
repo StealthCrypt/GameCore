@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import {PLATFORM_MAP} from '@/stuff/constants';
 
 interface GameCardProps {
   id: string;
@@ -10,6 +11,7 @@ interface GameCardProps {
   genre?: string;
   onSale?: boolean;
   originalPrice?: number;
+  platform?: string;
 }
 
 export function GameCard({
@@ -20,7 +22,8 @@ export function GameCard({
   rating = 0,
   genre = 'Action',
   onSale,
-  originalPrice
+  originalPrice,
+  platform
 }: GameCardProps) {
   return (
     <Link href={`/game/${id}`}>
@@ -40,7 +43,29 @@ export function GameCard({
         </div>
         
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors truncate">{title}</h3>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors truncate">{title}</h3>
+            {platform && (
+              <div className="flex items-center gap-1 ml-2">
+                {platform.split(', ').map((platformName, index) => {
+                  const platformData = PLATFORM_MAP[platformName.trim()];
+                  if (!platformData) return null;
+                  return (
+                    <Image
+                      key={index}
+                      src={platformData.logo}
+                      alt={platformName}
+                      width={20}
+                      height={20}
+                      style={platformData.filter ? { filter: 'brightness(0) invert(1)' } : {}}
+                      className="flex-shrink-0"
+                      title={platformName}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
           <p className="text-gray-400 text-sm mb-2">{genre}</p>
           
           <div className="flex items-center mb-3">
@@ -78,8 +103,8 @@ export function GameCard({
                 </span>
               )}
             </div>
-            
-            <button 
+
+            <button
               onClick={(e) => {
                 e.preventDefault();
                 // Add to cart/purchase logic here

@@ -1,8 +1,19 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
-import { gamesAPI } from '@/lib/api'
+import { gamesAPI } from '@/stuff/api'
 import { useGames } from '@/hooks/useGames'
+
+const PLATFORMS = [
+  { name: 'Epic Games', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg', filter: false },
+  { name: 'Steam', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg', filter: false },
+  { name: 'EA', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0d/Electronic-Arts-Logo.svg', filter: true },
+  { name: 'Riot Games', logo: 'https://static.wikia.nocookie.net/logopedia/images/6/65/Riot_Games_2022_(Symbol).svg', filter: true },
+  { name: 'Ubisoft', logo: 'https://companieslogo.com/img/orig/UBI.PA-84c96b09.svg', filter: true },
+  { name: 'Microsoft Store', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Microsoft_Store.svg', filter: false },
+  { name: 'Rockstar Games', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Rockstar_Games.svg', filter: true }
+]
 
 export default function AdminPage() {
   const { games, loading, error } = useGames()
@@ -12,6 +23,7 @@ export default function AdminPage() {
     price: '',
     category: '',
     imageUrl: '',
+    platforms: [] as string[],
     isFree: false
   })
   const [imageFile, setImageFile] = useState<File | null>(null)
@@ -63,11 +75,12 @@ export default function AdminPage() {
         description: formData.description,
         price: formData.isFree ? 0 : (formData.price ? parseFloat(formData.price) : 0),
         category: formData.category,
-        imageUrl: finalImageUrl
+        imageUrl: finalImageUrl,
+        platform: formData.platforms.join(', ') // added this line to send to the database for the platforms
       })
       
       setMessage('Game added successfully!')
-      setFormData({ title: '', description: '', price: '', category: '', imageUrl: '', isFree: false })
+      setFormData({ title: '', description: '', price: '', category: '', imageUrl: '', platforms: [] as string[], isFree: false })
       setImageFile(null)
       setImagePreview('')
       
@@ -94,6 +107,18 @@ export default function AdminPage() {
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Failed to delete game')
     }
+  }
+
+  function handlePlatformToggle(platformName: string) {
+    setFormData(currentFormData => {
+      const isAlreadySelected = currentFormData.platforms.includes(platformName)
+      
+      const newPlatforms = isAlreadySelected
+        ? currentFormData.platforms.filter(p => p !== platformName) // Remove if checked
+        : [...currentFormData.platforms, platformName] // Add if unchecked
+      
+      return { ...currentFormData, platforms: newPlatforms }
+    })
   }
 
   return (
@@ -126,6 +151,42 @@ export default function AdminPage() {
                 placeholder="Game description..."
                 rows={3}
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-3">Platforms (Select all that apply)</label>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {PLATFORMS.map((platform) => (
+                  <label
+                    key={platform.name}
+                    className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-colors ${
+                      formData.platforms.includes(platform.name)
+                        ? 'bg-purple-600/20 border-purple-500'
+                        : 'bg-muted border-border hover:border-purple-400'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={formData.platforms.includes(platform.name)}
+                      onChange={() => handlePlatformToggle(platform.name)}
+                      className="w-4 h-4"
+                    />
+                    <Image
+                      src={platform.logo}
+                      alt={platform.name}
+                      width={20}
+                      height={20}
+                      style={platform.filter ? { filter: 'brightness(0) invert(1)' } : {}}
+                      className="flex-shrink-0"
+                    />
+                    <span className="text-sm">{platform.name}</span>
+                  </label>
+                ))}
+              </div>
+              {formData.platforms.length > 0 && (
+                <p className="text-sm text-purple-400 mt-2">
+                  Selected: {formData.platforms.join(', ')}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

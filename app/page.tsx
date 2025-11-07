@@ -8,6 +8,7 @@ export default function Home() {
   const { games, loading, error } = useGames()
   
   // Filter states
+  const [platforms, setPlatforms] = useState<string[]>([])//array of strings
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [freeOnly, setFreeOnly] = useState(false)
@@ -24,6 +25,13 @@ export default function Home() {
   // Filter and sort games
   const filteredGames = useMemo(() => {
     let filtered = [...games]
+    // Filter by game platform
+    if (platforms.length > 0) {
+      filtered = filtered.filter(game => 
+        game.platform && platforms.some(platform => game.platform?.includes(platform))
+      )
+    }
+
 
     // Filter by free games
     if (freeOnly) {
@@ -53,7 +61,7 @@ export default function Home() {
     }
 
     return filtered
-  }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy])
+  }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy, platforms])
 
   return (
     <main className="min-h-screen w-full bg-[#202020] flex relative">
@@ -253,7 +261,7 @@ export default function Home() {
               title={game.title}
               price={Number(game.price)}
               image={game.imageUrl || undefined}
-              rating={4}
+              platform={game.platform}
               genre={game.category || 'Action'}
             />
           ))}

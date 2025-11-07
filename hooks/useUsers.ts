@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usersAPI } from '@/lib/api'
+import { usersAPI } from '@/stuff/api'
 
 type Purchase = {
   id: string

@@ -31,6 +31,7 @@ model Game {
   price       Decimal  @db.Decimal(10, 2)
   imageUrl    String?
   category    String?
+  platform    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   purchases   Purchase[]
