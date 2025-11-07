@@ -24,9 +24,9 @@ async function fetchAPI(endpoint: string, options?: RequestInit) {
 export const gamesAPI = {
   getAll: () => fetchAPI('/games'),
   getById: (id: string) => fetchAPI(`/games/${id}`),
-  create: (data: { title: string; description?: string; price: number; imageUrl?: string; category?: string }) =>
+  create: (data: { title: string; description?: string; price: number; imageUrl?: string; category?: string; platform?: string }) =>
     fetchAPI('/games', { method: 'POST', body: JSON.stringify(data) }),
-  update: (id: string, data: Partial<{ title: string; description: string; price: number; imageUrl: string; category: string }>) =>
+  update: (id: string, data: Partial<{ title: string; description: string; price: number; imageUrl: string; category: string; platform: string }>) =>
     fetchAPI(`/games/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id: string) => fetchAPI(`/games/${id}`, { method: 'DELETE' }),
 }

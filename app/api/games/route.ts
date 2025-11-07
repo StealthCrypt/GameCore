@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/stuff/prisma'
 
 // GET all games
 export async function GET() {
@@ -25,7 +25,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { title, description, price, imageUrl, category } = body
+    const { title, description, price, imageUrl, category, platform } = body
 
     if (!title || !price) {
       return NextResponse.json(
@@ -41,6 +41,7 @@ export async function POST(request: Request) {
         price: parseFloat(price),
         imageUrl: imageUrl || null,
         category: category || null,
+        platform: platform || null
       }
     })
     
