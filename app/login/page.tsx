@@ -32,16 +32,14 @@ export default function Login() {
         password: formData.password
       })
 
-      // Store user data
-      if (rememberMe) {
-        localStorage.setItem('user', JSON.stringify(result.user))
-      } else {
-        sessionStorage.setItem('user', JSON.stringify(result.user))
-      }
+      // Store user data in localStorage (always, for consistency)
+      localStorage.setItem('user', JSON.stringify(result.user))
 
       // Success - redirect to home
       alert('Login successful!')
       router.push('/')
+      // Force a page reload to update navbar
+      window.location.href = '/'
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid email or password')
     } finally {

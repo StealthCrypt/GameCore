@@ -124,7 +124,15 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-center">Admin - Manage Games</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-bold">Admin - Manage Games</h1>
+          <a
+            href="/admin/requests"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
+            View Game Requests
+          </a>
+        </div>
 
         {/* Add Game Form */}
         <div className="bg-card border border-border rounded-lg p-6 mb-8">
