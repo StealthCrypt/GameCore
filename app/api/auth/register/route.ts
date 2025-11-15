@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/stuff/prisma'
 import bcrypt from 'bcrypt'
 
 // POST - Register new user

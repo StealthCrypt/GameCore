@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/stuff/prisma'
 
 // GET single game by ID
 export async function GET(

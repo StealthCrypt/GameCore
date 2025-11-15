@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { gamesAPI } from '@/lib/api'
+import { gamesAPI } from '@/stuff/api'
 
 type Game = {
   id: string
@@ -10,6 +10,7 @@ type Game = {
   price: string
   imageUrl?: string
   category?: string
+  platform?: string //added on
   createdAt: string
   updatedAt: string
 }
