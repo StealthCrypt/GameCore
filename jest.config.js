@@ -1,9 +1,9 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/$1',
+    '^@/(.*)$': '<rootDir>/$1',   // <-- makes "@/stuff/prisma" work
   },
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest"
+  }
 };

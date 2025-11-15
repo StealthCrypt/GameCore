@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '../../../../stuff/prisma'
 import { prisma } from '@/stuff/prisma'
 //uses the genereate token function from token ts file
 import { generateToken } from '../JWT'

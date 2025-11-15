@@ -4,6 +4,33 @@ import { useGames } from "@/hooks/useGames"
 import { GameCard } from "./components/GameCard"
 import { useState, useMemo } from "react"
 
+export type Game = {
+  id: string | number
+  title: string
+  price: string | number
+  imageUrl?: string | null
+  platform?: string | null
+  category?: string | null
+}
+
+export function sortGames(
+  games: Game[],
+  sortBy: 'price-asc' | 'price-desc' | 'name' | ''
+): Game[] {
+  const sorted = [...games]
+
+  if (sortBy === 'price-asc') {
+    sorted.sort((a, b) => Number(a.price) - Number(b.price))
+  } else if (sortBy === 'price-desc') {
+    sorted.sort((a, b) => Number(b.price) - Number(a.price))
+  } else if (sortBy === 'name') {
+    sorted.sort((a, b) => a.title.localeCompare(b.title))
+  }
+
+  return sorted
+}
+
+
 export default function Home() {
   const { games, loading, error } = useGames()
   
@@ -51,16 +78,9 @@ export default function Home() {
       filtered = filtered.filter(game => game.category === selectedCategory)
     }
 
-    // Sort
-    if (sortBy === 'price-asc') {
-      filtered.sort((a, b) => Number(a.price) - Number(b.price))
-    } else if (sortBy === 'price-desc') {
-      filtered.sort((a, b) => Number(b.price) - Number(a.price))
-    } else if (sortBy === 'name') {
-      filtered.sort((a, b) => a.title.localeCompare(b.title))
-    }
+        // Sort using helper
+    return sortGames(filtered as Game[], sortBy)
 
-    return filtered
   }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy, platforms])
 
   return (
@@ -256,15 +276,16 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {filteredGames.map((game) => (
             <GameCard
-              key={game.id}
-              id={game.id}
+              key={String(game.id)}
+              id={String(game.id)}                
               title={game.title}
               price={Number(game.price)}
               image={game.imageUrl || undefined}
-              platform={game.platform}
+              platform={game.platform ?? undefined}
               genre={game.category || 'Action'}
             />
           ))}
+
         </div>
       </div>
     </main>
