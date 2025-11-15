@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/stuff/prisma'
+import { prisma } from '../../../../stuff/prisma'
 import bcrypt from 'bcrypt'
 
 // POST - Login user
