@@ -4,16 +4,44 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
+type User = {
+  name?: string
+  email?: string
+  isAdmin?: boolean
+}
+
 const Navbar = () => {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     setMounted(true)
+    // Check if user is logged in by checking localStorage
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
   }, [])
 
   const isActive = (path: string) => mounted && pathname === path
+
+  async function handleLogout() {
+    try {
+      // Call logout API to clear the HttpOnly cookie
+      await fetch('/api/auth/logout', { method: 'POST' })
+      
+      // Clear localStorage
+      localStorage.removeItem('user')
+      setUser(null)
+      
+      // Redirect to login
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
 
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50 shadow-lg shadow-white/20 bg-gradient-to-r from-gray-900 to-purple-400">
@@ -28,7 +56,6 @@ const Navbar = () => {
               <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
                 Game Core
               </h1>
-              <p className="text-xs text-muted-foreground">by Vision Labs</p>
             </div>
           </Link>
 
@@ -39,7 +66,7 @@ const Navbar = () => {
               placeholder="Search games..."
               className="w-full bg-muted border border-border rounded-lg px-4 py-2 pl-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
-            <Link href="/search">
+            <>
               <svg
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
                 fill="none"
@@ -53,19 +80,11 @@ const Navbar = () => {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-            </Link>
+            </>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
-            <Link
-              href="/"
-              className={`px-3 py-2 rounded-md transition-colors ${
-                isActive("/") ? "text-purple-500 bg-purple-500/10" : "text-foreground hover:text-purple-500"
-              }`}
-            >
-              Store
-            </Link>
             <Link
               href="/profile"
               className={`px-3 py-2 rounded-md transition-colors ${
@@ -90,22 +109,54 @@ const Navbar = () => {
             >
               Request
             </Link>
-            <Link
-              href="/login"
-              className={`flex items-center px-3 py-2 rounded-md transition-colors ${
-                isActive("/login") ? "text-purple-500 bg-purple-500/10" : "text-foreground hover:text-purple-500"
-              }`}
-            >
-              <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-              Login
-            </Link>
+            
+            {/* Show user info if logged in, otherwise show login/signup */}
+            {user ? (
+              <>
+                <span className="text-md text-white">
+                  {user.name || user.email}
+                </span>
+                {user.isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="px-3 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className={`flex items-center px-3 py-2 rounded-md transition-colors ${
+                    isActive("/login") ? "text-purple-500 bg-purple-500/10" : "text-foreground hover:text-purple-500"
+                  }`}
+                >
+                  <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="px-3 py-2 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -189,23 +240,60 @@ const Navbar = () => {
             >
               Request
             </Link>
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center px-4 py-3 rounded-md transition-colors ${
-                isActive("/login") ? "text-purple-500 bg-purple-500/10" : "text-foreground hover:bg-purple-500/10"
-              }`}
-            >
-              <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-              Login
-            </Link>
+            
+            {/* Mobile user menu */}
+            {user ? (
+              <>
+                <div className="px-4 py-3 text-white">
+                  Welcome, {user.name || user.email}
+                </div>
+                {user.isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 rounded-md bg-purple-600 text-white"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    handleLogout()
+                  }}
+                  className="block w-full text-left px-4 py-3 rounded-md bg-red-600 text-white"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center px-4 py-3 rounded-md transition-colors ${
+                    isActive("/login") ? "text-purple-500 bg-purple-500/10" : "text-foreground hover:bg-purple-500/10"
+                  }`}
+                >
+                  <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-4 py-3 rounded-md bg-purple-600 text-white text-center"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/a
 // Generic fetch wrapper
 async function fetchAPI(endpoint: string, options?: RequestInit) {
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    credentials: 'include', // This sends cookies with the request!
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
@@ -46,6 +47,16 @@ export const authAPI = {
     fetchAPI('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
   login: (data: { email: string; password: string }) =>
     fetchAPI('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+}
+
+// Requests API
+export const requestsAPI = {
+  getAll: () => fetchAPI('/requests'),
+  create: (data: { gameName: string; description?: string }) =>
+    fetchAPI('/requests', { method: 'POST', body: JSON.stringify(data) }),
+  updateStatus: (id: string, status: 'pending' | 'approved' | 'rejected') =>
+    fetchAPI(`/requests/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+  delete: (id: string) => fetchAPI(`/requests/${id}`, { method: 'DELETE' }),
 }
 
 
