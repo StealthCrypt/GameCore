@@ -2,10 +2,10 @@
 
 import { useGames } from "@/hooks/useGames"
 import { GameCard } from "./components/GameCard"
-import { useState, useMemo } from "react"
+import { useState, useMemo, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 
-export default function Home() {
+function HomeContent() {
   const { games, loading, error } = useGames()
   const searchParams = useSearchParams()
   const searchQuery = searchParams.get('search') || ''
@@ -279,5 +279,17 @@ export default function Home() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen w-full bg-[#202020] flex items-center justify-center">
+        <p className="text-white text-xl">Loading...</p>
+      </main>
+    }>
+      <HomeContent />
+    </Suspense>
   )
 }

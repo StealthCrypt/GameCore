@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
@@ -11,7 +11,7 @@ type User = {
   isAdmin?: boolean
 }
 
-const Navbar = () => {
+function NavbarContent() {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -335,4 +335,21 @@ const Navbar = () => {
     </header>
   );
 }
+
+const Navbar = () => {
+  return (
+    <Suspense fallback={
+      <header className="bg-background border-b border-border sticky top-0 z-50 shadow-lg shadow-white/20 bg-gradient-to-r from-gray-900 to-purple-400">
+        <div className="container mx-auto px-4 lg:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="h-8 w-8 bg-purple-600 rounded-lg"></div>
+          </div>
+        </div>
+      </header>
+    }>
+      <NavbarContent />
+    </Suspense>
+  )
+}
+
 export default Navbar
