@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Image from "next/image"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 type User = {
   name?: string
@@ -12,9 +13,12 @@ type User = {
 
 const Navbar = () => {
   const pathname = usePathname()
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '') //search bar
 
   useEffect(() => {
     setMounted(true)
@@ -24,6 +28,32 @@ const Navbar = () => {
       setUser(JSON.parse(storedUser))
     }
   }, [])
+
+  //for search bar
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pathname !== '/') {
+      router.push(`/?search=${encodeURIComponent(searchQuery)}`)
+    } else {
+      const url = new URL(window.location.href)
+      url.searchParams.set('search', searchQuery)
+      router.push(url.pathname + url.search)
+    }
+  }
+
+  //for search bar
+  const handleSearchInput = (value: string) => {
+    setSearchQuery(value)
+    if (pathname === '/') {
+      const url = new URL(window.location.href)
+      if (value) {
+        url.searchParams.set('search', value)
+      } else {
+        url.searchParams.delete('search')
+      }
+      router.push(url.pathname + url.search)
+    }
+  }
 
   const isActive = (path: string) => mounted && pathname === path
 
@@ -48,40 +78,45 @@ const Navbar = () => {
       <div className="container mx-auto px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="h-8 w-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">GC</span>
+          <Link href="/" className="flex items-center">
+            <div className=" flex items-center justify-center">
+              <Image
+                src="/Logo SVG.svg"
+                alt="Game Core Logo"
+                width={64}
+                height={64}
+              />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent ">
                 Game Core
               </h1>
             </div>
           </Link>
 
           {/* Desktop Search Bar */}
-          <div className="hidden md:block relative flex-1 max-w-md mx-4">
+          <form onSubmit={handleSearch} className="hidden md:block relative flex-1 max-w-md mx-4">
             <input 
               type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearchInput(e.target.value)}
               placeholder="Search games..."
               className="w-full bg-muted border border-border rounded-lg px-4 py-2 pl-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
-            <>
-              <svg
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </>
-          </div>
+            <svg
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </form>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
@@ -180,28 +215,28 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 space-y-2">
             {/* Mobile Search */}
-            <div className="md:hidden relative mb-4">
+            <form onSubmit={handleSearch} className="md:hidden relative mb-4">
               <input 
                 type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchInput(e.target.value)}
                 placeholder="Search games..."
                 className="w-full bg-muted border border-border rounded-lg px-4 py-2 pl-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              <Link href="/search">
-                <svg
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </Link>
-            </div>
+              <svg
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </form>
 
             {/* Mobile Navigation Links */}
             <Link

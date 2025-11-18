@@ -3,12 +3,15 @@
 import { useGames } from "@/hooks/useGames"
 import { GameCard } from "./components/GameCard"
 import { useState, useMemo } from "react"
+import { useSearchParams } from "next/navigation"
 
 export default function Home() {
   const { games, loading, error } = useGames()
+  const searchParams = useSearchParams()
+  const searchQuery = searchParams.get('search') || ''
   
   // Filter states
-  const [platforms, setPlatforms] = useState<string[]>([])//array of strings
+  const [platforms] = useState<string[]>([])//array of strings
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [freeOnly, setFreeOnly] = useState(false)
@@ -25,6 +28,14 @@ export default function Home() {
   // Filter and sort games
   const filteredGames = useMemo(() => {
     let filtered = [...games]
+    
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(game => 
+        game.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+    
     // Filter by game platform
     if (platforms.length > 0) {
       filtered = filtered.filter(game => 
@@ -61,7 +72,7 @@ export default function Home() {
     }
 
     return filtered
-  }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy, platforms])
+  }, [games, minPrice, maxPrice, freeOnly, selectedCategory, sortBy, platforms, searchQuery])
 
   return (
     <main className="min-h-screen w-full bg-[#202020] flex relative">
