@@ -1,14 +1,20 @@
+// Mock JWT module before importing the route
+jest.mock('../app/api/auth/JWT', () => ({
+  signToken: jest.fn(() => 'mock-jwt-token'),
+  verifyToken: jest.fn(() => ({ userId: '1' })),
+}));
+
 import { POST } from '../app/api/auth/login/route';
-import { prisma } from '../lib/prisma';
+import { prisma } from '../stuff/prisma';
 import bcrypt from 'bcrypt';
 
 // Mock Prisma and bcrypt
-jest.mock('../lib/prisma', () => ({
+jest.mock('../stuff/prisma', () => ({
   prisma: {
     user: {
       findUnique: jest.fn(),
     },
-  },
+  },  
 }));
 
 jest.mock('bcrypt', () => ({
