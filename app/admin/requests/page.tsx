@@ -2,19 +2,14 @@
 
 import { useRequests } from '@/hooks/useRequests'
 import { requestsAPI, gamesAPI } from '@/stuff/api'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useUser } from '@/hooks/useUser'
 
 export default function AdminRequestsPage() {
   const { requests, loading, error, refetch } = useRequests()
   const [message, setMessage] = useState('')
-  const [user, setUser] = useState(null as null | { isAdmin: boolean })
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
-    }
-  }, [])
+  // useUser hook handles all user fetching logic in one place
+  const { user } = useUser()
 
   async function handleStatusUpdate(requestId: string, status: 'approved' | 'rejected') {
     try {
@@ -25,7 +20,9 @@ export default function AdminRequestsPage() {
           // Parse description to extract external link and platforms
           let externalLink = ''
           let platforms = ''
+
           
+          //this part used AI
           if (request.description) {
             const linkMatch = request.description.match(/External Link:\s*(.+?)(?:\n|$)/)
             const platformMatch = request.description.match(/Platforms:\s*(.+?)(?:\n|$)/)

@@ -1,9 +1,10 @@
 'use client'
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { requestsAPI } from "@/stuff/api";
 import { PLATFORMS } from "@/stuff/constants";
+import { useUser } from "@/hooks/useUser";
 
 const CUSTOM_CHECKBOX = "justify-center text-md font-semibold text-center ml-2 appearance-none checked:bg-purple-500 checked:border-white border-2 unchecked:border-white w-4 h-4 rounded-sm bg-gray-800 transition-all duration-200 ease-in-out";
 const INPUT_STYLE = "w-full bg-muted border border-border rounded-lg py-2 pl-2 mb-10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-3 focus:transition-all duration-400 ease-in-out";
@@ -14,15 +15,8 @@ export default function Request() {
     const [selectedPlatforms, setSelectedPlatforms] = useState([])
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState('')
-    const [user, setUser] = useState(null)
-
-    useEffect(() => {
-        // Check if user is logged in
-        const storedUser = localStorage.getItem('user')
-        if (storedUser) {
-            setUser(JSON.parse(storedUser))
-        }
-    }, [])
+    // useUser hook handles all user fetching logic in one place
+    const { user, loading: fetchingUser } = useUser()
 
     function handlePlatformToggle(platformName) {
         setSelectedPlatforms(prev =>
@@ -68,6 +62,14 @@ Platforms: ${selectedPlatforms.length > 0 ? selectedPlatforms.join(', ') : 'Not 
         }
     }
 
+    if (fetchingUser) {
+        return (
+            <main className="overflow-hidden flex justify-center items-center bg-black text-white p-5" style={{ backgroundColor: '#101014ff' }}>
+                <p className="text-xl">Loading...</p>
+            </main>
+        )
+    }
+    
     return (
         <main className="overflow-hidden flex justify-center items-center bg-black text-white p-5" style={{ backgroundColor: '#101014ff' }}>
             <div className=" p-1 w-4/5 h-4/5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg max-h-[1200px] flex flex-col">
@@ -122,13 +124,7 @@ Platforms: ${selectedPlatforms.length > 0 ? selectedPlatforms.join(', ') : 'Not 
                                     className={`text-white text-lg rounded-lg w-fit h-fit text-center flex items-center justify-center space-x-1 px-2 py-1 cursor-pointer transition-all ${
                                         selectedPlatforms.includes(platform.name) ? 'ring-2 ring-white' : ''
                                     } ${!user || loading ? 'opacity-50 cursor-not-allowed' : 'hover:ring-2 hover:ring-gray-400'}`}
-                                    style={{ backgroundColor: platform.name === 'Epic Games' ? '#374151' : 
-                                             platform.name === 'Steam' ? '#1e3a8a' : 
-                                             platform.name === 'EA' ? '#4b5563' : 
-                                             platform.name === 'Riot Games' ? '#ef4444' : 
-                                             platform.name === 'Ubisoft' ? '#3b82f6' : 
-                                             platform.name === 'Microsoft Store' ? '#1e40af' : 
-                                             platform.name === 'Rockstar Games' ? '#fb923c' : '#374151' }}
+                                    style={{ backgroundColor: platform.color }}
                                 >
                                     <Image
                                         className="flex justify-center items-center pr-1"

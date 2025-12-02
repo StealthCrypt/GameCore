@@ -25,7 +25,7 @@ export function requireAuth(request: NextRequest): TokenPayload {
 export function requireAdmin(request: NextRequest): TokenPayload {
   const user = requireAuth(request)
   if (!user.isAdmin) {
-    throw new Error('Admin access required')
+    throw new Error('Admin required')
   }
   return user
 }

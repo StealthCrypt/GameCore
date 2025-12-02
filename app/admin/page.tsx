@@ -4,19 +4,13 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { gamesAPI } from '@/stuff/api'
 import { useGames } from '@/hooks/useGames'
-
-const PLATFORMS = [
-  { name: 'Epic Games', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg', filter: false },
-  { name: 'Steam', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg', filter: false },
-  { name: 'EA', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0d/Electronic-Arts-Logo.svg', filter: true },
-  { name: 'Riot Games', logo: 'https://static.wikia.nocookie.net/logopedia/images/6/65/Riot_Games_2022_(Symbol).svg', filter: true },
-  { name: 'Ubisoft', logo: 'https://companieslogo.com/img/orig/UBI.PA-84c96b09.svg', filter: true },
-  { name: 'Microsoft Store', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Microsoft_Store.svg', filter: false },
-  { name: 'Rockstar Games', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/Rockstar_Games.svg', filter: true }
-]
+import { useUser } from '@/hooks/useUser'
+import { PLATFORMS } from '@/stuff/constants'
 
 export default function AdminPage() {
   const { games, loading, error } = useGames()
+  // useUser hook handles all user fetching logic in one place
+  const { user, loading: fetchingUser } = useUser()
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -119,6 +113,28 @@ export default function AdminPage() {
       
       return { ...currentFormData, platforms: newPlatforms }
     })
+  }
+
+  if (fetchingUser) {
+    return (
+      <main className="min-h-screen flex justify-center items-center bg-black text-white">
+        <p className="text-xl">Loading...</p>
+      </main>
+    )
+  }
+
+  if (!user?.isAdmin) {
+    return (
+      <main className="overflow-hidden flex justify-center items-center bg-black text-white p-5" style={{ backgroundColor: '#101014ff' }}>
+        <div className="p-1 w-4/5 h-4/5 bg-gradient-to-r from-purple-600 to-purple-400 rounded-lg max-h-[1200px] flex flex-col">
+          <div className="bg-black rounded-lg p-6 flex-grow overflow-y-auto" style={{ backgroundColor: '#101014ff' }}>
+            <h1 className="text-3xl font-bold flex justify-center items-center pb-3">Access Denied</h1>
+            <p className="text-center">You do not have permission to access this page.</p>
+            <p className="text-center mt-4 text-gray-400">This page is only accessible to administrators.</p>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -245,9 +261,6 @@ export default function AdminPage() {
               <div className="mb-4">
                 <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-border border-dashed rounded-lg cursor-pointer bg-muted hover:bg-muted/80 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg className="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
                     <p className="mb-2 text-sm text-gray-400">
                       <span className="font-semibold">Click to upload</span> or drag and drop
                     </p>
@@ -281,9 +294,6 @@ export default function AdminPage() {
                       }}
                       className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
                     </button>
                   </div>
                 </div>
